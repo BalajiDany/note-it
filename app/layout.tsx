@@ -8,7 +8,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en" suppressHydrationWarning>
             <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-            <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+            <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
             <body className="antialiased">
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                     <ClerkProvider>

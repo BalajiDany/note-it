@@ -32,10 +32,16 @@ function Content() {
     const [message, setMessage] = useState('')
     const [lockDelete, setLockDelete] = useState(false)
 
+    const [startDate] = useState(dayjs().startOf('day').valueOf())
+    const [endDate] = useState(dayjs().endOf('day').valueOf())
+
     const addMessage = useMutation(api.messages.addMessage);
     const deleteMessage = useMutation(api.messages.deleteMessage);
-    const allMessages = useQuery(api.messages.all);
 
+    const allMessages = useQuery(api.messages.getByDate, {
+        start: startDate,
+        end: endDate
+    });
 
     const submitClick = useCallback(async () => {
         // await api.postMessage('hello')
@@ -55,7 +61,7 @@ function Content() {
     }, [lockDelete, setLockDelete, deleteMessage])
 
     return (
-        <div className='mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-6 h-dvh gap-4'>
+        <div className='mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-8 lg:pb-4 h-dvh gap-4'>
             <div className='flex justify-between items-center'>
                 <div className='flex gap-2'>
                     <p className='text-sm leading-none font-medium'>

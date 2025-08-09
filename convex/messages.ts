@@ -15,6 +15,31 @@ export const addMessage = mutation({
     },
 });
 
+export const getByDate = query({
+    args: {
+        start: v.number(),
+        end: v.number(),
+    },
+    handler: async (ctx, { start, end }) => {
+        const identity = await ctx.auth.getUserIdentity();
+        if (identity === null) {
+            throw new Error("Not authenticated");
+        }
+
+        const messages = await ctx.db
+            .query("messages")
+            .filter((q) =>
+                q.and(
+                    q.eq(q.field("userId"), identity.tokenIdentifier),
+                    q.gte(q.field("_creationTime"), start),
+                    q.lte(q.field("_creationTime"), end)
+                )
+            )
+            .collect();
+        return messages;
+    },
+});
+
 export const all = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity();
