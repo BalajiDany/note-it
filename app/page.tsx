@@ -8,7 +8,7 @@ import { SignInButton, UserButton } from '@clerk/nextjs'
 import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Menu, Trash2 } from 'lucide-react'
+import { Menu, SendHorizontal, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { api } from '../convex/_generated/api'
 
@@ -55,7 +55,7 @@ function Content() {
     }, [lockDelete, setLockDelete, deleteMessage])
 
     return (
-        <div className='mx-auto container flex flex-col max-w-3xl p-4 h-dvh gap-4'>
+        <div className='mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-6 h-dvh gap-4'>
             <div className='flex justify-between items-center'>
                 <div className='flex gap-2'>
                     <p className='text-sm leading-none font-medium'>
@@ -81,7 +81,7 @@ function Content() {
                                     <Separator orientation='vertical' className='h-3!' />
 
                                     <p className='text-sm text-muted-foreground'>
-                                        AI response
+                                        AI responses
                                     </p>
                                 </div>
                             </div>
@@ -100,7 +100,9 @@ function Content() {
                     <Menu />
                 </Button>
                 <Input type="text" list="autocompleteOff" value={message} onChange={e => setMessage(e.target.value)} autoComplete='off' placeholder="Enter a message" />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" size="icon" >
+                    <SendHorizontal />
+                </Button>
             </form>
         </div>
     )
