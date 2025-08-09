@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
     return {
         name: "Note It",
-        short_name: "Ni",
+        short_name: "Note It",
         description: "Note all my messages",
         start_url: "/",
         display: "standalone",

@@ -1,11 +1,12 @@
 'use client'
 
+import { useStoreUserEffect } from '@/components/hooks/useAuthState'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Id } from '@/convex/_generated/dataModel'
 import { SignInButton, UserButton } from '@clerk/nextjs'
-import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Menu, SendHorizontal, Trash2 } from 'lucide-react'
@@ -15,16 +16,12 @@ import { api } from '../convex/_generated/api'
 dayjs.extend(relativeTime);
 
 export default function Home() {
+    const { isLoading, isAuthenticated } = useStoreUserEffect();
     return (
-        <>
-            <Authenticated>
-                <Content />
-            </Authenticated>
-            <Unauthenticated>
-                <SignInButton />
-            </Unauthenticated>
-        </>
-    )
+        <main>
+            {isLoading ? (<>Loading...</>) : !isAuthenticated ? (<SignInButton />) : (<Content />)}
+        </main>
+    );
 }
 
 function Content() {
