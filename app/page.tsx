@@ -8,7 +8,7 @@ export default function Home() {
     const { isLoading, isAuthenticated } = useStoreUserEffect()
     
     return (
-        <main>
+        <main className='fixed inset-0'>
             {isLoading ? (
                 <div className="flex items-center justify-center h-screen">
                     <p>Loading...</p>

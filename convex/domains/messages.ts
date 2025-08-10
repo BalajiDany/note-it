@@ -8,7 +8,7 @@ export const addMessage = mutation({
     },
     handler: async (ctx, { text }) => {
         const user = await getUser(ctx);
-        await ctx.db.insert("messages", { text, userId: user._id, status: "new" });
+        await ctx.db.insert("messages", { text, userId: user._id, status: 0 });
     },
 });
 

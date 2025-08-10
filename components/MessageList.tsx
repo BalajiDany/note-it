@@ -1,15 +1,10 @@
 'use client'
 
 import { MessageItem } from './MessageItem'
-
-interface Message {
-    _id: string
-    _creationTime: number
-    text: string
-}
+import { Doc } from '@/convex/_generated/dataModel'
 
 interface MessageListProps {
-    messages: Message[] | undefined
+    messages: Doc<"messages">[] | undefined
 }
 
 export function MessageList({ messages }: MessageListProps) {

@@ -5,12 +5,7 @@ export default defineSchema({
     messages: defineTable({
         userId: v.string(),
         text: v.string(),
-        status: v.union(
-            v.literal("new"),
-            v.literal("in_progress"), 
-            v.literal("complete"),
-            v.literal("failed")
-        ),
+        status: v.union(v.literal(0), v.literal(1), v.literal(2), v.literal(3), v.literal(-1)),
     }).index("by_user", ["userId"]),
     users: defineTable({
         name: v.string(),

@@ -3,20 +3,22 @@
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { api } from '@/convex/_generated/api'
-import { Id } from '@/convex/_generated/dataModel'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useMutation } from 'convex/react'
 import dayjs from 'dayjs'
 import { Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
-interface Message {
-    _id: string
-    _creationTime: number
-    text: string
+interface MessageItemProps {
+    message: Doc<"messages">
 }
 
-interface MessageItemProps {
-    message: Message
+const statusLabels: Record<Doc<"messages">["status"], string> = {
+    [-1]: 'Deleted',
+    [+0]: 'New',
+    [+1]: 'In Progress',
+    [+2]: 'Completed',
+    [+3]: 'Archived',
 }
 
 export function MessageItem({ message }: MessageItemProps) {
@@ -50,7 +52,7 @@ export function MessageItem({ message }: MessageItemProps) {
                     <Separator orientation="vertical" className="h-3!" />
 
                     <p className="text-sm text-muted-foreground">
-                        AI responses
+                        {statusLabels[message.status]}
                     </p>
                 </div>
             </div>
