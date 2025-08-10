@@ -9,9 +9,9 @@ export async function aiAction(messageId: Id<"messages">) {
 
     const message = await fetchQuery(api.domains.messages.getById, { id: messageId }, { token });
     await fetchMutation(api.domains.messages.updateStatus, { id: message._id, status: 1 }, { token });
-    setTimeout(async () => {
-        await fetchMutation(api.domains.messages.updateStatus, { id: message._id, status: 2 }, { token });
-    }, 5000);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await fetchMutation(api.domains.messages.updateStatus, { id: message._id, status: 2 }, { token });
 
     return {
         status: "ok",
