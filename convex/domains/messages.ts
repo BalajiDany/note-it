@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "../_generated/server";
+import { StatusType } from "../schema";
 import { getUser } from "./user";
 
 export const addMessage = mutation({
@@ -8,7 +9,7 @@ export const addMessage = mutation({
     },
     handler: async (ctx, { text }) => {
         const user = await getUser(ctx);
-        await ctx.db.insert("messages", { text, userId: user._id, status: 0 });
+        return await ctx.db.insert("messages", { text, userId: user._id, status: 0 });
     },
 });
 
@@ -30,6 +31,41 @@ export const getByDate = query({
             )
             .collect();
         return messages;
+    },
+});
+
+export const getById = query({
+    args: {
+        id: v.id("messages"),
+    },
+    handler: async (ctx, { id }) => {
+        const user = await getUser(ctx);
+        const message = await ctx.db.get(id);
+        if (message?.userId !== user._id) {
+            throw new Error("Not authorized");
+        } else if (!message) {
+            throw new Error("Message not found");
+        }
+        return message;
+    },
+});
+
+export const updateStatus = mutation({
+    args: {
+        id: v.id("messages"),
+        status: StatusType,
+    },
+    handler: async (ctx, { id, status }) => {
+        const user = await getUser(ctx);
+        const message = await ctx.db.get(id);
+
+        if (message?.userId !== user._id) {
+            throw new Error("Not authorized");
+        } else if (!message) {
+            throw new Error("Message not found");
+        }
+
+        await ctx.db.patch(id, { status });
     },
 });
 

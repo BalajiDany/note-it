@@ -7,6 +7,7 @@ import calendar from 'dayjs/plugin/calendar'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { useCallback, useState } from 'react'
+import { aiAction } from '../actions/ai/Action'
 import { Header } from './Header'
 import { MessageInput } from './MessageInput'
 import { MessageList } from './MessageList'
@@ -29,8 +30,11 @@ export function MainContent() {
     const handleSubmit = useCallback(async () => {
         if (!message || !message.trim()) return
 
-        await addMessage({ text: message })
+        const messageId = await addMessage({ text: message })
         setMessage('')
+
+        if (messageId) aiAction(messageId); // Fire and forget
+
     }, [message, addMessage])
 
     const handleDateChange = useCallback((newDate: Date) => {
@@ -38,7 +42,7 @@ export function MainContent() {
     }, [])
 
     return (
-        <div className="mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-8 lg:pb-4 h-dvh gap-4">
+        <div className="mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-8 lg:pb-4 max-h-dvh h-full gap-4">
             <Header
                 date={date}
                 onDateChange={handleDateChange}
