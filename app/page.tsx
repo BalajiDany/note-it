@@ -1,6 +1,6 @@
 'use client'
 
-import { useStoreUserEffect } from '@/components/hooks/useAuthState'
+import { useStoreUserEffect } from '@/components/hooks/useStoreUserEffect'
 import { MainContent } from '@/components/MainContent'
 import { SignInButton } from '@clerk/nextjs'
 
