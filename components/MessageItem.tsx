@@ -21,7 +21,7 @@ interface MessageItemProps {
 
 export function MessageItem({ message }: MessageItemProps) {
     const [isDeleting, setIsDeleting] = useState(false)
-    const deleteMessage = useMutation(api.messages.deleteMessage)
+    const deleteMessage = useMutation(api.domains.messages.deleteMessage)
 
     const handleDelete = useCallback(async () => {
         if (isDeleting) return

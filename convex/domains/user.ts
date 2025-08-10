@@ -1,6 +1,6 @@
 import { GenericMutationCtx, GenericQueryCtx } from "convex/server";
-import { Doc } from "./_generated/dataModel";
-import { mutation } from "./_generated/server";
+import { Doc } from "../_generated/dataModel";
+import { mutation } from "../_generated/server";
 
 export const getUser = async (ctx: GenericQueryCtx<any> | GenericMutationCtx<any>): Promise<Doc<"users">> => {
     const identity = await ctx.auth.getUserIdentity();

@@ -15,13 +15,13 @@ export function Header({ date, onDateChange }: HeaderProps) {
 
     const handleDateSelect = (selectedDate: Date | undefined) => {
         if (!selectedDate) return
-        
+
         onDateChange(selectedDate)
         setIsCalendarOpen(false)
     }
 
     const navigateDate = (direction: 'prev' | 'next') => {
-        const newDate = direction === 'prev' 
+        const newDate = direction === 'prev'
             ? dayjs(date).subtract(1, 'day').toDate()
             : dayjs(date).add(1, 'day').toDate()
         onDateChange(newDate)
@@ -32,15 +32,15 @@ export function Header({ date, onDateChange }: HeaderProps) {
             <div className="justify-self-start">
                 <h1 className="text-sm font-bold">Note It</h1>
             </div>
-            
-            <DateNavigation 
+
+            <DateNavigation
                 date={date}
                 isCalendarOpen={isCalendarOpen}
                 onCalendarOpenChange={setIsCalendarOpen}
                 onDateSelect={handleDateSelect}
                 onNavigateDate={navigateDate}
             />
-            
+
             <div className="justify-self-end">
                 <UserButton />
             </div>

@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import dayjs from 'dayjs'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface DateNavigationProps {
     date: Date

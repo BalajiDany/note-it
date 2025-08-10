@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query } from "../_generated/server";
 import { getUser } from "./user";
 
 export const addMessage = mutation({
@@ -8,7 +8,7 @@ export const addMessage = mutation({
     },
     handler: async (ctx, { text }) => {
         const user = await getUser(ctx);
-        await ctx.db.insert("messages", { text, userId: user._id });
+        await ctx.db.insert("messages", { text, userId: user._id, status: "new" });
     },
 });
 
