@@ -33,17 +33,6 @@ export const getByDate = query({
     },
 });
 
-export const all = query({
-    handler: async (ctx) => {
-        const user = await getUser(ctx);
-
-        return await ctx.db
-            .query("messages")
-            .filter((q) => q.eq(q.field("userId"), user._id))
-            .collect();
-    },
-});
-
 export const deleteMessage = mutation({
     args: {
         id: v.id("messages"),
