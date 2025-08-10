@@ -2,18 +2,35 @@
 
 import { useStoreUserEffect } from '@/components/hooks/useAuthState'
 import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Id } from '@/convex/_generated/dataModel'
 import { SignInButton, UserButton } from '@clerk/nextjs'
 import { useMutation, useQuery } from 'convex/react'
 import dayjs from 'dayjs'
+import calendar from 'dayjs/plugin/calendar'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Menu, SendHorizontal, Trash2 } from 'lucide-react'
+import updateLocale from 'dayjs/plugin/updateLocale'
+import { ChevronLeft, ChevronRight, Menu, SendHorizontal, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { api } from '../convex/_generated/api'
 
 dayjs.extend(relativeTime);
+dayjs.extend(calendar);
+dayjs.extend(updateLocale);
+
+// dayjs.updateLocale('en', {
+// //   calendar: {
+// //     lastDay: '[Yesterday at] LT',
+// //     sameDay: '[Today at] LT',
+// //     nextDay: '[Tomorrow at] LT',
+// //     lastWeek: '[last] dddd [at] LT',
+// //     nextWeek: 'dddd [at] LT',
+// //     sameElse: 'L'
+// //   }
+// // })
 
 export default function Home() {
     const { isLoading, isAuthenticated } = useStoreUserEffect();
@@ -24,21 +41,38 @@ export default function Home() {
     );
 }
 
+const format = {
+    sameDay: "[Today]",
+    nextDay: "[Tomorrow]",
+    lastDay: "[Yesterday]",
+    nextWeek: "dddd",
+    lastWeek: "[Last] dddd",
+    sameElse: " ",
+}
+
 function Content() {
 
     const [message, setMessage] = useState('')
     const [lockDelete, setLockDelete] = useState(false)
 
-    const [startDate] = useState(dayjs().startOf('day').valueOf())
-    const [endDate] = useState(dayjs().endOf('day').valueOf())
+    const [open, setOpen] = useState(false)
+    const [date, setDate] = useState<Date>(new Date())
+
+    // const [startDate, setStartDate] = useState(dayjs().startOf('day').valueOf())
+    // const [endDate, setEndDate] = useState(dayjs().endOf('day').valueOf())
 
     const addMessage = useMutation(api.messages.addMessage);
     const deleteMessage = useMutation(api.messages.deleteMessage);
 
     const allMessages = useQuery(api.messages.getByDate, {
-        start: startDate,
-        end: endDate
+        start: dayjs(date).startOf('day').valueOf(),
+        end: dayjs(date).endOf('day').valueOf()
     });
+
+    // useEffect(() => {
+    //     setStartDate(dayjs(date).startOf('day').valueOf())
+    //     setEndDate(dayjs(date).endOf('day').valueOf())
+    // }, [date, setStartDate, setEndDate])
 
     const submitClick = useCallback(async () => {
         // await api.postMessage('hello')
@@ -59,13 +93,43 @@ function Content() {
 
     return (
         <div className='mx-auto container flex flex-col max-w-3xl px-4 pt-4 pb-8 lg:pb-4 h-dvh gap-4'>
-            <div className='flex justify-between items-center'>
-                <div className='flex gap-2'>
-                    <p className='text-sm leading-none font-medium'>
-                        Today
-                    </p>
+            <div className='grid grid-cols-3 items-center justify-items-center'>
+                <div className='justify-self-start'>
+                    <h1 className='text-sm font-bold'>{allMessages?.length}</h1>
                 </div>
-                <UserButton />
+                <div className='flex gap-2'>
+                    <Button variant="ghost" size="icon" onClick={() => setDate(d => dayjs(d).subtract(1, 'day').toDate())}>
+                        <ChevronLeft />
+                    </Button>
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <Button variant="ghost" className="w-fit justify-between font-normal" >
+                                {date ? dayjs(date).format('DD MMM, YYYY') : "Select date"}
+                                {" "}
+                                {/* {date ? dayjs(date).calendar(null, format) : ""} */}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto overflow-hidden p-0">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                captionLayout="dropdown"
+                                onSelect={(date) => {
+                                    if (!date) return;
+
+                                    setDate(date)
+                                    setOpen(false)
+                                }}
+                            />
+                        </PopoverContent>
+                    </Popover>
+                    <Button variant="ghost" size="icon" onClick={() => setDate(d => dayjs(d).add(1, 'day').toDate())}>
+                        <ChevronRight />
+                    </Button>
+                </div>
+                <div className='justify-self-end'>
+                    <UserButton />
+                </div>
             </div>
             <div className='grow overflow-auto no-scrollbar'>
                 <div className='flex flex-col gap-3'>
