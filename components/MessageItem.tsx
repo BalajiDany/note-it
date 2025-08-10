@@ -45,13 +45,13 @@ export function MessageItem({ message }: MessageItemProps) {
                     {message.text}
                 </h4>
                 <div className="flex items-center h-full justify-start gap-2">
-                    <p className="text-muted-foreground text-sm">
-                        {dayjs(message._creationTime).fromNow()}
+                    <p className="text-muted-foreground text-sm shrink-0">
+                        {dayjs(message._creationTime).format('hh:mm A')}
                     </p>
 
                     <Separator orientation="vertical" className="h-3!" />
 
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground truncate">
                         {message.status == 2 ? message.response : statusLabels[message.status]}
                     </p>
                 </div>
