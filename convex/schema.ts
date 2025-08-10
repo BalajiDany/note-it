@@ -14,6 +14,7 @@ export default defineSchema({
         userId: v.string(),
         text: v.string(),
         status: StatusType,
+        response: v.optional(v.string()),
     }).index("by_user", ["userId"]),
     users: defineTable({
         name: v.string(),

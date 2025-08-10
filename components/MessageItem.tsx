@@ -52,7 +52,7 @@ export function MessageItem({ message }: MessageItemProps) {
                     <Separator orientation="vertical" className="h-3!" />
 
                     <p className="text-sm text-muted-foreground">
-                        {statusLabels[message.status]}
+                        {message.status == 2 ? message.response : statusLabels[message.status]}
                     </p>
                 </div>
             </div>

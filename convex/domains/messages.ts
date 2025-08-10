@@ -50,6 +50,26 @@ export const getById = query({
     },
 });
 
+export const updateResponse = mutation({
+    args: {
+        id: v.id("messages"),
+        status: StatusType,
+        response: v.string(),
+    },
+    handler: async (ctx, { id, response, status }) => {
+        const user = await getUser(ctx);
+        const message = await ctx.db.get(id);
+
+        if (message?.userId !== user._id) {
+            throw new Error("Not authorized");
+        } else if (!message) {
+            throw new Error("Message not found");
+        }
+
+        await ctx.db.patch(id, { response, status });
+    },
+});
+
 export const updateStatus = mutation({
     args: {
         id: v.id("messages"),
